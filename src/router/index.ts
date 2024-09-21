@@ -17,8 +17,16 @@ function makeExtendedRouter<T extends {
   })
 
 
-  function push<K extends keyof T>(key: K, params: T[K]["params"]) {
+  type MakeExtendedRouterArgs<K extends keyof T> = T[K]["params"] extends Record<string, any> ?
+    [first: K, second: T[K]["params"]] :
+    [first: K, second?: undefined];
+
+  function push<T extends keyof typeof ExtendedRoutes>(
+    ...args: MakeExtendedRouterArgs<T>
+  ) {
+    const [key, params] = args
     const route = ExtendedRoutes[key]
+    console.log(route.record.name)
     router.push({ name: route.record.name, params: params as RouteParamsRawGeneric | undefined })
   }
 
@@ -31,21 +39,28 @@ function makeExtendedRouter<T extends {
 
 
 
-
+import authAtore from '@/store/authStore'
 
 export default makeExtendedRouter({
-  
+
   HomeView: {
     record: {
       path: '/',
-      name: 'home',
-      component: () => import('../views/HomeView.vue')
+      name: 'HomeView',
+      component: () => import('../views/HomeView.vue'),
+      beforeEnter: (to, from, next) => {
+        if (!authAtore.state.token) {
+          return next({ name: 'LoginView', params: { goBackRoute: "HomeView" } })
+        }
+
+        next()
+      }
     }
   },
   LoginView: {
     record: {
-      path: '/login',
-      name: 'login',
+      path: '/login/:goBackRoute?',
+      name: 'LoginView',
       component: () => import('../views/LoginView.vue')
     },
     params: {

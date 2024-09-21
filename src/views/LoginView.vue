@@ -1,19 +1,25 @@
-<script setup lang="ts">
-import { useRouter, useRoute } from 'vue-router'
+<template>
+    {{ authStore.state.token }}
+    {{ route.params }}
+    <div>
+        <button @click="login">Login</button>
+    </div>
+</template>
 
-import authStore from '@/store/auth'
+<script setup lang="ts">
+import extendedRouter from '@/router'
+import authStore from '@/store/authStore'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
 const login = async () => {
-    authStore.setToken("Eu setei esse token no login")
 
+    const goBackRoute = route.params.goBackRoute as string
+
+    if (goBackRoute) {
+        // extendedRouter.push(goBackRoute as any)
+        extendedRouter.push("HomeView")
+    }
 }
 </script>
-
-<template>
-    <div>
-        {{ authStore.state.token }}
-        <button @click="login">Login</button>
-    </div>
-</template>
