@@ -16,11 +16,6 @@ export default function createTypedStore<T, A extends {
       actionHandlers: A
     }
 ) {
-
-  console.log("actionHandlers")
-  console.log(actionHandlers)
-
-
   type StateType = T & {
     actionState: {
       [A in keyof typeof actionHandlers]: "loading" | "success" | "error";
@@ -59,10 +54,6 @@ export default function createTypedStore<T, A extends {
       store.commit("setState", { key, value })
     }
   })
-
-  console.log("actionHandlers")
-
-  console.log(actionHandlers)
 
   actionHandlers && Object.keys(actionHandlers as unknown as object).forEach(key => {
     methods[key] = async () => {

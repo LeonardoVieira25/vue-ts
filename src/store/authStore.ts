@@ -3,23 +3,32 @@ import createTypedStore from ".";
 export default createTypedStore({
     initState: {
         token: "",
+
+        posts: [] as Array<{
+            id: number,
+            title: string,
+            body: string,
+            userId: number
+        }>,
     },
     mutationHandlers: {
-        token: (state, payload) => payload
+        token: (state, payload) => payload,
+        posts: (state, payload) => payload
     },
     actionHandlers: {
         logIn: async (state) => {
-            // await new Promise((resolve) => setTimeout(() => {
-            //     state.token = "logged"
-            //     resolve(undefined)
-            // }, 1000))
-            await new Promise((resolve, reject) => setTimeout(() => {
+            const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+            if (!res.ok) {
                 state.token = ""
-                reject("Esse é o erro que foi retornado")
-            }, 1000))
+                throw new Error("Network response was not ok");
+            }
+            state.token = "123"
+            const data = await res.json();
+            state.posts = data;
+
         },
-        teste: async (state) => {
-            console.log("teste")
+        logOut: async (state) => {
+            state.token = ""
         }
     }
 })

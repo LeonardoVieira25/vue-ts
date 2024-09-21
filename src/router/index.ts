@@ -25,9 +25,7 @@ function makeExtendedRouter<T extends {
     ...args: MakeExtendedRouterArgs<T>
   ) {
     const [key, params] = args
-    console.log(key, params)
     const route = ExtendedRoutes[key || "HomeView"]
-    console.log(route.record.name)
     router.replace({ name: route.record.name, params: params as RouteParamsRawGeneric | undefined })
   }
 
