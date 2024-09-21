@@ -25,9 +25,10 @@ function makeExtendedRouter<T extends {
     ...args: MakeExtendedRouterArgs<T>
   ) {
     const [key, params] = args
-    const route = ExtendedRoutes[key]
+    console.log(key, params)
+    const route = ExtendedRoutes[key || "HomeView"]
     console.log(route.record.name)
-    router.push({ name: route.record.name, params: params as RouteParamsRawGeneric | undefined })
+    router.replace({ name: route.record.name, params: params as RouteParamsRawGeneric | undefined })
   }
 
   return {
@@ -46,11 +47,11 @@ export default makeExtendedRouter({
   HomeView: {
     record: {
       path: '/',
-      name: 'HomeView',
+      name: 'home',
       component: () => import('../views/HomeView.vue'),
       beforeEnter: (to, from, next) => {
         if (!authAtore.state.token) {
-          return next({ name: 'LoginView', params: { goBackRoute: "HomeView" } })
+          return next({ name: 'login', params: { goBackRoute: "HomeView" } })
         }
 
         next()
@@ -60,11 +61,18 @@ export default makeExtendedRouter({
   LoginView: {
     record: {
       path: '/login/:goBackRoute?',
-      name: 'LoginView',
+      name: 'login',
       component: () => import('../views/LoginView.vue')
     },
     params: {
       goBackRoute: null as string | null
+    }
+  },
+  AboutView: {
+    record: {
+      path: '/about',
+      name: 'about',
+      component: () => import('../views/AboutView.vue')
     }
   }
 

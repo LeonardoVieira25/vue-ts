@@ -3,6 +3,7 @@
     {{ route.params }}
     <div>
         <button @click="login">Login</button>
+        <button @click="extendedRouter.push('AboutView')">about</button>
     </div>
 </template>
 
@@ -15,11 +16,11 @@ const route = useRoute()
 
 const login = async () => {
 
+    authStore.setToken("token")
     const goBackRoute = route.params.goBackRoute as string
 
     if (goBackRoute) {
-        // extendedRouter.push(goBackRoute as any)
-        extendedRouter.push("HomeView")
+        extendedRouter.push(goBackRoute as any)
     }
 }
 </script>
