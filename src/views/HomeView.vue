@@ -1,6 +1,9 @@
 <template>
   <div class="home">
-    {{ typedStore.state.token }}
+    {{ authStore.state.token }}
+    <button @click="extendedRouter.push('LoginView', {
+      goBackRoute: 'HomeView'
+    })">Logout</button>
   </div>
 </template>
 
@@ -9,8 +12,7 @@
 
 <script setup lang="ts">
 
-import { typedStore } from '@/store/index'
-
-
+import authStore from '@/store/auth'
+import extendedRouter from '@/router'
 
 </script>

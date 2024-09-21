@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 
-export function createTypedStore<T>(
+export default function createTypedStore<T>(
   {
     initState,
     mutationHandlers
@@ -61,12 +61,3 @@ export function createTypedStore<T>(
       [K in keyof T as `set${Capitalize<string & K>}`]: (value: T[K]) => void
     }
 }
-
-export const typedStore = createTypedStore({
-  initState: {
-    token: "",
-  },
-  mutationHandlers: {
-    token: (state, payload) => payload
-  }
-})
